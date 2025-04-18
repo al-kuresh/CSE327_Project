@@ -1,0 +1,5 @@
+{
+    "php.executablePath": "D:/XAMPP/php/php.exe",
+    "intelephense.environment.includePaths": ["D:/XAMPP/htdocs/mobile_wallet/php"],
+    "intelephense.diagnostics.undefinedClasses": false
+}

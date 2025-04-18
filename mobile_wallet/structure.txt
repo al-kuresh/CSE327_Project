@@ -1,0 +1,32 @@
+mobile_wallet/
+├── css/
+│   └── styles.css
+├── php/
+│   ├── config.php
+│   ├── db_singleton.php
+│   ├── user_builder.php
+│   ├── transaction_factory.php
+│   ├── payment_strategy.php
+│   ├── transaction_observer.php
+│   ├── bill_adapter.php
+│   ├── auth.php
+│   ├── transactions.php
+│   └── bills.php
+├── index.php
+├── login.php
+├── register.php
+├── reset_password.php
+├── dashboard.php
+├── send_money.php
+├── send_money_confirm.php
+├── cash_in.php
+├── cash_in_confirm.php
+├── cash_out.php
+├── cash_out_confirm.php
+├── check_balance.php
+├── mobile_recharge.php
+├── mobile_recharge_confirm.php
+├── pay_bill.php
+├── pay_bill_confirm.php
+├── transaction_history.php
+└── database.sql
