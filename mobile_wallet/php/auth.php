@@ -2,10 +2,8 @@
 require_once 'db_singleton.php';
 require_once 'user_builder.php';
 
-// Debug: Confirm this file is loaded
 error_log("auth.php loaded at " . date('Y-m-d H:i:s'));
 
-// Handle logout request
 $auth = new Auth();
 if (isset($_GET['logout']) && $_GET['logout'] == '1') {
     $auth->logout();
@@ -25,6 +23,12 @@ class Auth {
     }
 
     public function register($username, $password, $email, $phone, $nid) {
+        // Sanitize inputs
+        $username = trim($username);
+        $email = trim($email);
+        $phone = trim($phone);
+        $nid = trim($nid);
+
         // Validate password: 8+ characters, at least 1 uppercase, 1 lowercase, 1 number
         if (strlen($password) < 8 || !preg_match("/[A-Z]/", $password) || !preg_match("/[a-z]/", $password) || !preg_match("/[0-9]/", $password)) {
             throw new Exception("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.");
@@ -32,6 +36,7 @@ class Auth {
 
         // Validate NID: exactly 12 digits
         if (!preg_match("/^\d{12}$/", $nid)) {
+            error_log("NID validation failed: '$nid' (length: " . strlen($nid) . ")");
             throw new Exception("NID must be exactly 12 digits.");
         }
 

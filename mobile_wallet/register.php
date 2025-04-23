@@ -4,19 +4,27 @@ $auth = new Auth();
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $phone = $_POST['phone'];
-    $nid = $_POST['nid'];
+    $username = trim($_POST['username']); // Trim username to avoid spaces
+    $password = $_POST['password']; // Password will be hashed, so no trimming needed
+    $phone = trim($_POST['phone']); // Trim phone
+    $nid = trim($_POST['nid']); // Trim NID to remove leading/trailing spaces
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+
+    // Debug: Log the exact NID value to see if there are hidden characters
+    error_log("NID input: '$nid' (length: " . strlen($nid) . ")");
 
     // Validate phone (11 digits)
     if (!preg_match('/^\d{11}$/', $phone)) {
         $message = "Phone number must be exactly 11 digits!";
     }
-    // Validate NID (12 digits)
+    // Validate NID (must be exactly 12 digits, only digits allowed)
     elseif (!preg_match('/^\d{12}$/', $nid)) {
-        $message = "NID must be exactly 12 digits!";
+        // Additional check to inform user about non-digit characters
+        if (!ctype_digit($nid)) {
+            $message = "NID must contain only digits!";
+        } else {
+            $message = "NID must be exactly 12 digits!";
+        }
     }
     // Validate password (8+ chars, upper, lower, number)
     elseif (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/', $password)) {
@@ -26,11 +34,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     elseif (!$email) {
         $message = "Invalid email address!";
     }
-    elseif ($auth->register($username, $password, $phone, $nid, $email)) {
-        header("Location: login.php");
-        exit;
-    } else {
-        $message = "Registration failed! Username, phone, email, or NID may already be in use.";
+    else {
+        try {
+            if ($auth->register($username, $password, $phone, $nid, $email)) {
+                header("Location: login.php");
+                exit;
+            } else {
+                $message = "Registration failed! Username, phone, email, or NID may already be in use.";
+            }
+        } catch (Exception $e) {
+            $message = "Registration error: " . htmlspecialchars($e->getMessage());
+        }
     }
 }
 ?>
@@ -89,3 +103,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 </body>
 </html>
+?>
