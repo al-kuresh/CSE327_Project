@@ -1,36 +1,30 @@
 <?php
+// Strategy Pattern: Payment processing strategies
 interface PaymentStrategy {
-    public function pay(float $amount): string;
+    public function processPayment(float $amount): string;
 }
 
-class WalletPayment implements PaymentStrategy {
-    // Strategy Pattern: WalletPayment implements payment logic
-    public function pay(float $amount): string {
-        return "Payment processed via wallet: ৳$amount";
+class CreditCardPayment implements PaymentStrategy {
+    public function processPayment(float $amount): string {
+        return "Processed credit card payment of ৳$amount";
     }
 }
 
-class BankPayment implements PaymentStrategy {
-    // Strategy Pattern: BankPayment implements payment logic
-    public function pay(float $amount): string {
-        return "Payment processed via bank: ৳$amount";
+class BankTransferPayment implements PaymentStrategy {
+    public function processPayment(float $amount): string {
+        return "Processed bank transfer payment of ৳$amount";
     }
 }
 
-class PaymentContext {
-    private PaymentStrategy $strategy;
+class PaymentProcessor {
+    private $strategy;
 
-    // Strategy Pattern: PaymentContext allows dynamic strategy selection
-    public function __construct(PaymentStrategy $strategy) {
+    public function setStrategy(PaymentStrategy $strategy) {
         $this->strategy = $strategy;
     }
 
-    public function setStrategy(PaymentStrategy $strategy): void {
-        $this->strategy = $strategy;
-    }
-
-    public function pay(float $amount): string {
-        return $this->strategy->pay($amount);
+    public function process(float $amount): string {
+        return $this->strategy->processPayment($amount);
     }
 }
 ?>

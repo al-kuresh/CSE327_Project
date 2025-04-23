@@ -1,0 +1,14 @@
+{
+    "name": "kuresh/mobile_wallet",
+    "description": "Mobile Wallet Application for CSE327 Project",
+    "type": "project",
+    "require": {
+        "php": ">=8.2.12",
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "MobileWallet\\": "php/"
+        }
+    }
+}

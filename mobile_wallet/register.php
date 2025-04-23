@@ -8,11 +8,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $_POST['password'];
     $phone = $_POST['phone'];
     $nid = $_POST['nid'];
-    if ($auth->register($username, $password, $phone, $nid)) {
+    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+
+    // Validate phone (11 digits)
+    if (!preg_match('/^\d{11}$/', $phone)) {
+        $message = "Phone number must be exactly 11 digits!";
+    }
+    // Validate NID (12 digits)
+    elseif (!preg_match('/^\d{12}$/', $nid)) {
+        $message = "NID must be exactly 12 digits!";
+    }
+    // Validate password (8+ chars, upper, lower, number)
+    elseif (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/', $password)) {
+        $message = "Password must be at least 8 characters, with uppercase, lowercase, and numbers!";
+    }
+    // Validate email
+    elseif (!$email) {
+        $message = "Invalid email address!";
+    }
+    elseif ($auth->register($username, $password, $phone, $nid, $email)) {
         header("Location: login.php");
         exit;
     } else {
-        $message = "Registration failed! Username or NID may already be in use.";
+        $message = "Registration failed! Username, phone, email, or NID may already be in use.";
     }
 }
 ?>
@@ -22,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -38,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="card-body">
                         <h2 class="card-title text-center">Register</h2>
                         <?php if ($message): ?>
-                            <div class="alert alert-danger"><?php echo $message; ?></div>
+                            <div class="alert alert-danger"><?php echo htmlspecialchars($message); ?></div>
                         <?php endif; ?>
                         <form method="POST">
                             <div class="mb-3">
@@ -47,15 +65,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                                <input type="password" class="form-control" id="password" name="password" required pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}" title="Password must be at least 8 characters, with uppercase, lowercase, and numbers">
                             </div>
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone</label>
-                                <input type="text" class="form-control" id="phone" name="phone" required>
+                                <input type="text" class="form-control" id="phone" name="phone" required pattern="\d{11}" title="Phone number must be exactly 11 digits">
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
                             </div>
                             <div class="mb-3">
                                 <label for="nid" class="form-label">NID Number</label>
-                                <input type="text" class="form-control" id="nid" name="nid" required>
+                                <input type="text" class="form-control" id="nid" name="nid" required pattern="\d{12}" title="NID must be exactly 12 digits">
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Register</button>
                         </form>

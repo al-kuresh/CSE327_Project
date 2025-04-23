@@ -1,82 +1,144 @@
+/* Custom styles for Mobile Wallet project */
+
+/* Import Google Font for modern typography */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
+/* General styles */
 body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-    min-height: 100vh;
-    margin: 0;
+    background: linear-gradient(135deg, #E5E5E5 0%, #D5D5D5 100%); /* Subtle ash-grey gradient */
+    color: #1D1D1D; /* Dark charcoal text */
+    font-family: 'Poppins', sans-serif; /* Modern font */
+    font-size: 16px;
+    line-height: 1.6;
 }
 
+/* Navbar (header) */
 .navbar {
-    background-color: #ffffff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 1rem 0;
+    background: linear-gradient(90deg, #1D1D1D 0%, #333333 100%) !important; /* Gradient black navbar */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+    padding: 10px 0;
 }
-
-.navbar-brand {
+.navbar-brand, .navbar-nav .nav-link {
+    color: #FFFFFF !important; /* White text for contrast */
     font-weight: 600;
-    color: #ff4d4d !important;
-    font-size: 1.5rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+.navbar-brand:hover, .navbar-nav .nav-link:hover {
+    color: #E63946 !important; /* Softer red on hover */
+    transform: translateY(-2px); /* Subtle lift effect */
 }
 
-.nav-link {
-    color: #333 !important;
-    font-weight: 400;
-    margin-left: 1rem;
+/* Container */
+.container {
+    padding: 20px 0;
+}
+
+/* Headings */
+h2 {
+    color: #1D1D1D !important; /* Dark charcoal */
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Cards */
+.card {
+    background-color: #E5E5E5; /* Lighter ash-grey */
+    border: none !important; /* Remove default border */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+}
+.card-body {
+    padding: 20px !important; /* Slightly more padding for comfort */
+}
+
+/* Buttons */
+.btn-primary {
+    background: linear-gradient(45deg, #E63946 0%, #F76C6C 100%) !important; /* Gradient red button */
+    border: none !important; /* Remove border */
+    border-radius: 10px; /* Rounded corners */
+    color: #FFFFFF !important; /* White text */
+    font-weight: 600;
+    padding: 8px 20px;
+    box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3); /* Subtle red shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.btn-primary:hover {
+    background: linear-gradient(45deg, #F76C6C 0%, #E63946 100%) !important; /* Reverse gradient on hover */
+    transform: translateY(-2px); /* Lift effect */
+    box-shadow: 0 6px 15px rgba(230, 57, 70, 0.5); /* Stronger shadow */
+}
+.btn-secondary {
+    background: linear-gradient(45deg, #1D1D1D 0%, #333333 100%) !important; /* Gradient black button */
+    border: none !important;
+    border-radius: 10px;
+    color: #FFFFFF !important;
+    font-weight: 600;
+    padding: 8px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.btn-secondary:hover {
+    background: linear-gradient(45deg, #333333 0%, #1D1D1D 100%) !important; /* Reverse gradient on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}
+.btn-link {
+    color: #E63946 !important; /* Softer red for links */
+    font-weight: 500;
     transition: color 0.3s ease;
 }
-
-.nav-link:hover {
-    color: #ff4d4d !important;
+.btn-link:hover {
+    color: #F76C6C !important; /* Lighter red on hover */
+    text-decoration: none; /* Remove underline on hover */
 }
 
-.container {
-    margin-top: 2rem;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-    color: #333;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    text-align: center;
-}
-
-.card {
-    border: none;
+/* Alerts */
+.alert-info {
+    background: linear-gradient(45deg, #E63946 0%, #F76C6C 100%) !important; /* Gradient red alert */
+    color: #FFFFFF !important; /* White text */
+    border: none !important;
     border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3);
+}
+.alert-danger {
+    background: linear-gradient(45deg, #F76C6C 0%, #E63946 100%) !important; /* Reverse gradient for danger */
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3);
 }
 
-.card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+/* Form controls */
+.form-control {
+    background-color: #FFFFFF !important; /* White background */
+    border: 1px solid #1D1D1D !important; /* Dark charcoal border */
+    border-radius: 8px; /* Rounded corners */
+    color: #1D1D1D !important;
+    font-weight: 400;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.form-control:focus {
+    border-color: #E63946 !important; /* Red border on focus */
+    box-shadow: 0 0 0 0.2rem rgba(230, 57, 70, 0.25) !important; /* Red shadow on focus */
 }
 
-.card-body {
-    padding: 1.5rem;
-    background: #ffffff;
-}
-
-.card-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #333;
-}
-
-.btn-primary {
-    background: linear-gradient(90deg, #ff4d4d, #ff7676);
-    border: none;
-    padding: 0.75rem 1.5rem;
+/* Labels */
+.form-label {
+    color: #1D1D1D !important; /* Dark charcoal */
     font-weight: 500;
-    transition: background 0.3s ease;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
 }
 
-.btn-primary:hover {
-    background: linear-gradient(90deg, #e63939);
+/* Smooth transitions for all elements */
+* {
+    transition: all 0.3s ease;
 }

@@ -1,25 +1,38 @@
 <?php
-require_once 'db_singleton.php';
 require_once 'bill_adapter.php';
 
-class BillManager {
-    private $db;
+// Strategy Pattern: Bill payment strategies
+interface BillPaymentStrategy {
+    public function payBill(float $amount, array $details): string;
+}
 
-    public function __construct() {
-        $this->db = Database::getInstance()->getConnection();
+class ElectricityBillPayment implements BillPaymentStrategy {
+    public function payBill(float $amount, array $details): string {
+        return "Processed electricity bill payment of ৳$amount to {$details['provider']} (Account: {$details['account_number']})";
+    }
+}
+
+class WifiBillPayment implements BillPaymentStrategy {
+    public function payBill(float $amount, array $details): string {
+        return "Processed WiFi bill payment of ৳$amount to {$details['provider']} (Account: {$details['account_number']})";
+    }
+}
+
+class ShoppingBillPayment implements BillPaymentStrategy {
+    public function payBill(float $amount, array $details): string {
+        return "Processed shopping bill payment of ৳$amount to {$details['provider']} (Merchant: {$details['account_number']})";
+    }
+}
+
+class BillManager {
+    private $strategy;
+
+    public function setStrategy(BillPaymentStrategy $strategy) {
+        $this->strategy = $strategy;
     }
 
-    public function payBill($user_id, $type, $provider, $account_number, $amount) {
-        // Adapter Pattern: Use BillAdapter to interface with LegacyBillSystem
-        $legacySystem = new LegacyBillSystem();
-        $adapter = new BillAdapter($legacySystem);
-        $result = $adapter->payBill($account_number, $amount);
-
-        $stmt = $this->db->prepare("INSERT INTO bills (user_id, type, provider, account_number, amount, status) VALUES (?, ?, ?, ?, ?, 'paid')");
-        $stmt->bind_param("isssd", $user_id, $type, $provider, $account_number, $amount);
-        $stmt->execute();
-
-        return $result;
+    public function processBillPayment(float $amount, array $details): string {
+        return $this->strategy->payBill($amount, $details);
     }
 }
 ?>

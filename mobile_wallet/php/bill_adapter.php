@@ -1,24 +1,24 @@
 <?php
-interface BillPayment {
-    public function payBill(string $accountNumber, float $amount): string;
+// Adapter Pattern: Adapts external bill payment systems
+interface ExternalBillPaymentSystem {
+    public function makePayment(float $amount, string $account): string;
 }
 
 class LegacyBillSystem {
-    public function makePayment($account, $amt) {
-        return "Legacy payment processed for account $account: ৳$amt";
+    public function processPayment(float $amount, string $account): string {
+        return "Legacy system processed payment of ৳$amount for account $account";
     }
 }
 
-class BillAdapter implements BillPayment {
+class BillSystemAdapter implements ExternalBillPaymentSystem {
     private $legacySystem;
 
-    // Adapter Pattern: BillAdapter adapts LegacyBillSystem to BillPayment interface
     public function __construct(LegacyBillSystem $legacySystem) {
         $this->legacySystem = $legacySystem;
     }
 
-    public function payBill(string $accountNumber, float $amount): string {
-        return $this->legacySystem->makePayment($accountNumber, $amount);
+    public function makePayment(float $amount, string $account): string {
+        return $this->legacySystem->processPayment($amount, $account);
     }
 }
 ?>

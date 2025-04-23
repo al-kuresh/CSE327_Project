@@ -1,16 +1,17 @@
 <?php
 require_once 'php/auth.php';
 $auth = new Auth();
-$message = '';
 
+$message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    if ($auth->login($username, $password)) {
+    $phone = $_POST['phone'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    if ($auth->login($phone, $password)) {
         header("Location: dashboard.php");
         exit;
     } else {
-        $message = "Invalid credentials!";
+        $message = "Invalid phone number or password.";
     }
 }
 ?>
@@ -19,38 +20,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Login - Mobile Wallet</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="#">Mobile Wallet</a>
+    <!-- Header with Mobile Wallet branding -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.php">Mobile Wallet</a>
         </div>
     </nav>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
+
+    <div class="container mt-3">
+        <h2 class="fs-4">Login</h2>
+        <div class="row">
+            <div class="col-md-4 mx-auto">
                 <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title text-center">Login</h2>
+                    <div class="card-body p-3">
                         <?php if ($message): ?>
-                            <div class="alert alert-danger"><?php echo $message; ?></div>
+                            <div class="alert alert-danger alert-sm"><?php echo htmlspecialchars($message); ?></div>
                         <?php endif; ?>
                         <form method="POST">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
+                            <div class="mb-2">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="text" class="form-control form-control-sm" id="phone" name="phone" placeholder=" " required>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                                <input type="password" class="form-control form-control-sm" id="password" name="password" required>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                            <button type="submit" class="btn btn-primary btn-sm">Login</button>
+                            <a href="register.php" class="btn btn-link btn-sm">Register</a>
+                            <a href="reset_password.php" class="btn btn-link btn-sm">Forgot Password?</a>
                         </form>
-                        <p class="mt-3 text-center">Don't have an account? <a href="register.php">Register</a></p>
-                        <p class="mt-2 text-center">Forgot password? <a href="reset_password.php">Reset Password</a></p>
                     </div>
                 </div>
             </div>
@@ -58,3 +61,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 </body>
 </html>
+?>

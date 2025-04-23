@@ -27,147 +27,57 @@ SET time_zone = "+00:00";
 -- Table structure for table `bills`
 --
 
-CREATE TABLE `bills` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `type` varchar(20) NOT NULL,
-  `provider` varchar(50) DEFAULT NULL,
-  `account_number` varchar(50) DEFAULT NULL,
-  `amount` decimal(10,2) NOT NULL,
-  `status` varchar(20) DEFAULT 'pending',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- Create Users Table
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(11) UNIQUE NOT NULL,
+    nid VARCHAR(12) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    balance DECIMAL(10,2) DEFAULT 0.00
+);
 
---
--- Dumping data for table `bills`
---
+-- Create Merchants Table
+CREATE TABLE merchants (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    merchant_number VARCHAR(50) UNIQUE NOT NULL,
+    name VARCHAR(100) NOT NULL
+);
 
-INSERT INTO `bills` (`id`, `user_id`, `type`, `provider`, `account_number`, `amount`, `status`, `created_at`) VALUES
-(1, 1, 'electricity', 'PowerCo', 'ELEC123', 200.00, 'paid', '2025-04-18 01:26:18'),
-(2, 2, 'wifi', 'NetProvider', 'WIFI456', 300.00, 'pending', '2025-04-18 01:26:18');
+-- Create Transactions Table
+CREATE TABLE transactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    type ENUM('send_money', 'receive_money', 'cash_in', 'cash_out', 'mobile_recharge', 'pay_bill') NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    recipient_phone VARCHAR(11),
+    merchant_number VARCHAR(50),
+    phone VARCHAR(11),
+    bill_type VARCHAR(50),
+    provider VARCHAR(100),
+    account_number VARCHAR(100),
+    sender_phone VARCHAR(11),
+    created_at DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
 
--- --------------------------------------------------------
+-- Insert Sample Users
+INSERT INTO users (username, password, phone, nid, email, balance) VALUES
+('kuresh', '$2y$10$8xZ6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Q', '01705395013', '123456789012', 'kureshreush@gmail.com', 10000.00),
+('shifat', '$2y$10$8xZ6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Q', '01838073738', '111213141516', 'kuresh450@gmail.com', 5000.00),
+('nazia', '$2y$10$8xZ6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Qz6Q', '01860491240', '313233343536', 'nazia@example.com', 7500.00);
 
---
--- Table structure for table `transactions`
---
+-- Insert Sample Merchants
+INSERT INTO merchants (merchant_number, name) VALUES
+('M123456', 'Merchant One'),
+('M789012', 'Merchant Two');
 
-CREATE TABLE `transactions` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `type` varchar(20) NOT NULL,
-  `amount` decimal(10,2) NOT NULL,
-  `recipient` varchar(50) DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `transactions`
---
-
-INSERT INTO `transactions` (`id`, `user_id`, `type`, `amount`, `recipient`, `description`, `created_at`) VALUES
-(1, 1, 'cash_in', 5000.00, NULL, 'Initial cash in', '2025-04-18 01:26:18'),
-(2, 1, 'send_money', 1000.00, '0987654321', 'Sent to Jane', '2025-04-18 01:26:18'),
-(3, 2, 'mobile_recharge', 500.00, '0987654321', 'Recharge for self', '2025-04-18 01:26:18'),
-(4, 2, 'pay_bill', 200.00, 'ELEC123', 'Electricity bill payment', '2025-04-18 01:26:18'),
-(5, 1, 'send_money', 100.00, '01705395013', 'Sent to 01705395013', '2025-04-18 05:24:34'),
-(6, 2, 'send_money', 200.00, '01838073738', 'Sent to 01838073738', '2025-04-18 05:27:30'),
-(7, 1, 'send_money', 500.00, '01860491240', 'Sent to 01860491240', '2025-04-18 06:45:36'),
-(8, 3, 'receive_money', 500.00, NULL, 'Received from user ID 1', '2025-04-18 06:45:36'),
-(9, 1, 'send_money', 50.00, '01860491240', 'Sent to 01860491240', '2025-04-18 06:59:26'),
-(10, 3, 'receive_money', 50.00, NULL, 'Received from 01838073738', '2025-04-18 06:59:26');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `phone` varchar(15) NOT NULL,
-  `nid` varchar(20) NOT NULL,
-  `balance` decimal(10,2) DEFAULT 0.00,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `username`, `password`, `phone`, `nid`, `balance`, `created_at`) VALUES
-(1, 'kuresh', '$2y$10$IkPOR5tV9G0bu202LmSlCe6/AqTCF9a2b/CXDkHba1wy0OyHeHw9u', '01838073738', '12345678910', 4350.00, '2025-04-18 01:26:18'),
-(2, 'shifat', '$2y$10$SiaeA9bTeDRdGBuulAQ5husA5hF2ymBK2FIi/p5xgIzal7QHi2gOu', '01705395013', '111213141516', 2800.00, '2025-04-18 01:26:18'),
-(3, 'Nazia', '$2y$10$3mXgePiDWkMM6b.TJUgNPu3y.Ns5hnpoix584VdHmm62UXEeuOlwS', '01860491240', '9876543210', 550.00, '2025-04-18 06:44:17');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `bills`
---
-ALTER TABLE `bills`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indexes for table `transactions`
---
-ALTER TABLE `transactions`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD UNIQUE KEY `nid` (`nid`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `bills`
---
-ALTER TABLE `bills`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `transactions`
---
-ALTER TABLE `transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `bills`
---
-ALTER TABLE `bills`
-  ADD CONSTRAINT `bills_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `transactions`
---
-ALTER TABLE `transactions`
-  ADD CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- Insert Sample Transactions
+INSERT INTO transactions (user_id, type, amount, recipient_phone, merchant_number, phone, bill_type, provider, account_number, sender_phone, created_at) VALUES
+(1, 'cash_in', 5000.00, NULL, 'M123456', NULL, NULL, NULL, NULL, NULL, '2025-04-20 10:00:00'),
+(1, 'send_money', 2000.00, '01838073738', NULL, NULL, NULL, NULL, NULL, NULL, '2025-04-20 12:00:00'),
+(2, 'receive_money', 2000.00, NULL, NULL, NULL, NULL, NULL, NULL, '01705395013', '2025-04-20 12:00:00'),
+(2, 'cash_out', 1000.00, NULL, 'M789012', NULL, NULL, NULL, NULL, NULL, '2025-04-21 09:00:00'),
+(3, 'mobile_recharge', 500.00, NULL, NULL, '01860491240', NULL, NULL, NULL, NULL, '2025-04-21 11:00:00'),
+(1, 'pay_bill', 1000.00, NULL, NULL, NULL, 'electricity', 'DPDC', 'E123456', NULL, '2025-04-22 08:00:00');

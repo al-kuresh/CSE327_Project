@@ -1,13 +1,13 @@
 <?php
 class Transaction {
-    private string $type;
-    private float $amount;
-    private ?string $recipient;
+    private $type;
+    private $amount;
+    private $details;
 
-    public function __construct(string $type, float $amount, ?string $recipient) {
+    public function __construct(string $type, float $amount, array $details) {
         $this->type = $type;
         $this->amount = $amount;
-        $this->recipient = $recipient;
+        $this->details = $details;
     }
 
     public function getType(): string {
@@ -18,15 +18,27 @@ class Transaction {
         return $this->amount;
     }
 
-    public function getRecipient(): ?string {
-        return $this->recipient;
+    public function getDetails(): array {
+        return $this->details;
     }
 }
 
 class TransactionFactory {
-    // Factory Pattern: TransactionFactory creates Transaction objects
-    public static function createTransaction(string $type, float $amount, ?string $recipient = null): Transaction {
-        return new Transaction($type, $amount, $recipient);
+    public static function createTransaction(string $type, float $amount, array $details): Transaction {
+        $validTypes = [
+            'send_money',
+            'receive_money', // Added to support recipient transactions
+            'cash_in',
+            'cash_out',
+            'mobile_recharge',
+            'pay_bill'
+        ];
+
+        if (!in_array($type, $validTypes)) {
+            throw new Exception("Unknown transaction type: $type");
+        }
+
+        return new Transaction($type, $amount, $details);
     }
 }
 ?>

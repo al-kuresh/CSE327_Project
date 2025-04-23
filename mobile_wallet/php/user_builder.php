@@ -1,47 +1,47 @@
 <?php
+// Builder Pattern: User object creation
 class User {
     public $username;
+    public $password;
     public $phone;
     public $nid;
-    public $balance;
-
-    public function __construct($username, $phone, $nid, $balance) {
-        $this->username = $username;
-        $this->phone = $phone;
-        $this->nid = $nid;
-        $this->balance = $balance;
-    }
+    public $email;
 }
 
 class UserBuilder {
-    private $username;
-    private $phone;
-    private $nid;
-    private $balance = 0.00;
+    private $user;
 
-    // Builder Pattern: UserBuilder constructs User object step-by-step
-    public function setUsername($username) {
-        $this->username = $username;
+    public function __construct() {
+        $this->user = new User();
+    }
+
+    public function setUsername(string $username): self {
+        $this->user->username = $username;
         return $this;
     }
 
-    public function setPhone($phone) {
-        $this->phone = $phone;
+    public function setPassword(string $password): self {
+        $this->user->password = $password;
         return $this;
     }
 
-    public function setNid($nid) {
-        $this->nid = $nid;
+    public function setPhone(string $phone): self {
+        $this->user->phone = $phone;
         return $this;
     }
 
-    public function setBalance($balance) {
-        $this->balance = $balance;
+    public function setNid(string $nid): self {
+        $this->user->nid = $nid;
         return $this;
     }
 
-    public function build() {
-        return new User($this->username, $this->phone, $this->nid, $this->balance);
+    public function setEmail(string $email): self {
+        $this->user->email = $email;
+        return $this;
+    }
+
+    public function build(): User {
+        return $this->user;
     }
 }
 ?>
